@@ -22,8 +22,11 @@ struct Pages: View {
                 }
             HStack(alignment: .top) {
                 Spacer()
-                Text(text)
-                .font(.body)
+				Text(text)
+					.font(.body)
+					.fontWeight(.regular)
+					
+                
                 Spacer()
             }
         }

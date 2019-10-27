@@ -6,6 +6,7 @@
 //  Copyright © 2019 frosty. All rights reserved.
 //
 
+import AVFoundation
 import Foundation
 import SwiftUI
 import UIKit
