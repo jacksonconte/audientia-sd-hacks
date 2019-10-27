@@ -36,10 +36,13 @@ struct PageViewController: UIViewControllerRepresentable {
         init(_ pageViewController: PageViewController) {
             self.parent = pageViewController
         }
+        
+        // When page moves back
         func pageViewController(
             _ pageViewController: UIPageViewController,
             viewControllerBefore viewController: UIViewController) -> UIViewController?
         {
+            
             guard let index = parent.controllers.firstIndex(of: viewController) else {
                 return nil
             }
@@ -49,6 +52,7 @@ struct PageViewController: UIViewControllerRepresentable {
             return parent.controllers[index - 1]
         }
 
+        // When page moves forward
         func pageViewController(
             _ pageViewController: UIPageViewController,
             viewControllerAfter viewController: UIViewController) -> UIViewController?
