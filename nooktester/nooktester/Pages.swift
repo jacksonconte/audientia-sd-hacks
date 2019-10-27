@@ -14,14 +14,6 @@ struct Pages: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-			/*
-            HStack(alignment: .top) {
-                Spacer()
-                Text("Chapter 5")
-                .font(.title).bold()
-                Spacer()
-                }
-*/
             HStack(alignment: .top) {
                 Spacer()
 				Text(text)

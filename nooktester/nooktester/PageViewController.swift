@@ -33,54 +33,91 @@ struct PageViewController: UIViewControllerRepresentable {
     }
     class Coordinator: NSObject, UIPageViewControllerDataSource {
         var parent: PageViewController
-		var audioPlayer : AVAudioPlayer!
-		// initialization of audio player tagged along here
+        var pageSoundPlayer : AVAudioPlayer! //audio player intialization is in a weird spot. deal with it.
+        var ambientSoundPlayer : AVAudioPlayer!
+
         init(_ pageViewController: PageViewController) {
             self.parent = pageViewController
         }
+        // backwards
         func pageViewController(
             _ pageViewController: UIPageViewController,
             viewControllerBefore viewController: UIViewController) -> UIViewController?
         {
 			print("backwards!")
-			pageSound()
-			// TODO: remove print statement and add sound function call
             guard let index = parent.controllers.firstIndex(of: viewController) else {
                 return nil
             }
+            playSound(i: index)
             if index == 0 {
                 return parent.controllers.last
             }
             return parent.controllers[index - 1]
         }
 
+        // forwards
         func pageViewController(
             _ pageViewController: UIPageViewController,
             viewControllerAfter viewController: UIViewController) -> UIViewController?
         {
 			print ("forwards!")
-			// TODO: remove print statement
-			pageSound()
             guard let index = parent.controllers.firstIndex(of: viewController) else {
                 return nil
             }
+            playSound(i: index)
             if index + 1 == parent.controllers.count {
+                
+                print(Comprehend().getKeyword(text: someText[0], pageNumber: parent.controllers.count-1))
                 return parent.controllers.first
             }
+            print(Comprehend().getKeyword(text: someText[0], pageNumber: index+1))
             return parent.controllers[index + 1]
         }
-		//TODO: get function to play appropriate text sounds,
-		// but first to actually play in the first place
-		func pageSound() {
-			let file = Bundle.main.path(forResource: "pageturn", ofType: "wav")
-			print(file!) //not just a "file", but a FILE! YEAHHH LETS GOOOOO
-			do {
-			audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: file!))
-				// the "!" in the line above force unwraps
-			} catch {
-				print (error)
-			}
-			audioPlayer.play()
-		}
+        func playSound(i: Int) {
+                let pageSoundPath = Bundle.main.path(forResource: "pageturn", ofType: "wav")
+                do {
+                    pageSoundPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: pageSoundPath!))
+                    // the "!" in the line above force unwraps
+                    let ambientSoundPath = ""
+                    // hard-coded page logic
+                    switch i {
+                        //sets ambientSound to whatever filepath we need
+                    case 0:
+                        print("a")
+                        let ambientSoundPath = try Bundle.main.path(forResource: "birds", ofType: "mp3")
+                        ambientSoundPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: ambientSoundPath!))
+                        break; //no one can stop me from using these semicolons. #JavaGang
+                    case 1:
+                        print("b")
+                        let ambientSoundPath = try Bundle.main.path(forResource: "cafe", ofType: "mp3")
+                        ambientSoundPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: ambientSoundPath!))
+                        break;
+                    case 2:
+                        print("c")
+                        let ambientSoundPath = try Bundle.main.path(forResource: "traffic", ofType: "mp3")
+                        ambientSoundPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: ambientSoundPath!))
+                        break;
+                    case 3:
+                        print("d")
+                        let ambientSoundPath = try Bundle.main.path(forResource: "office", ofType: "mp3")
+                        ambientSoundPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: ambientSoundPath!))
+                        break;
+                    case 4:
+                        let ambientSoundPath = try Bundle.main.path(forResource: "sexytimes", ofType: "mp3")
+                        ambientSoundPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: ambientSoundPath!))
+                        break;
+                    default:
+                        print("if you're reading this, you're program's screwed.")
+                        let ambientSoundPath = try Bundle.main.path(forResource: "birds", ofType: "mp3")
+                        ambientSoundPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: ambientSoundPath!))
+                        break; //why. just why.
+                    }
+                    
+                } catch {
+                    print (error)
+                }
+                pageSoundPlayer.play();
+                ambientSoundPlayer.play();
+            }
     }
 }
